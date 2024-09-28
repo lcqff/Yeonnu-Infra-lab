@@ -1,0 +1,38 @@
+# 두개의 FROM에 의해 두개의 컨테이너가 생성된다.
+
+
+# 첫번째 단계: Maven 컨테이너
+
+#빌드 환경 설정
+# AS build: 스테이지 이름 설정
+FROM maven:3.6 AS build
+WORKDIR /app
+
+# pom.xml과 src/ 디렉토리 복사
+# 라이브러리 정보
+COPY pom.xml .
+# 실제 소스코드
+COPY src ./src
+
+# 애플리케이션 빌드 (JAR 파일 생성)
+RUN mvn clean package
+
+
+
+# 두번째 단계: JDK 컨테이너
+
+#실행 환경 설정
+# openjdk:11-jre-slim: 자바 애플리케이션에 필요한 자바 런타임만 지님
+FROM openjdk:11-jre-slim
+WORKDIR /app
+
+# 빌드 단계에서 생성된 JAR 파일 복사
+# --from=build: build 스테이지의 /app/target/*.jar 파일을 사용
+COPY --from=build /app/target/*.jar ./app.jar
+
+# 애플리케이션 실행
+EXPOSE 8080
+CMD ["java", "-jar", "app.jar"]
+
+# docker build -f Dockerfile.multistage -t javaappmulti .
+# docker run —name buildapp-entrypoint-list buildapp:entrypoint /bin/bash
