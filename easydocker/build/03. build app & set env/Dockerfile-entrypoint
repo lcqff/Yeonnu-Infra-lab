@@ -1,0 +1,32 @@
+# 베이스 이미지 정의
+# 소스코드에서 사용하는 언어와 버전으로 지정
+# Node.js가 컴퓨터에 설치되어 있지 않아도 컨테이너 이미지를 통해 Node.js 애플리케이션을 빌드 및 실행 가능
+FROM node:14
+
+# 작업 디렉토리 수정
+WORKDIR /app
+
+# WORKDIR 이후 실행되는 지시어들은 WORKDIR에서 지정한 디렉토리에서 실행된다.
+# 빌드 컨텍스트의 모든 파일을 Docker 컨테이너의 /app 디렉토리로 복사
+COPY . .
+
+# npm install 명령 실행
+RUN npm install
+
+USER node
+EXPOSE 3000
+
+
+# cmd에서 고정적으로 사용되는 명령어 정의
+ENTRYPOINT["npm"]
+# ENTRYPOINT에 의해 npm start 명령 실행
+CMD ["start"]
+
+# `docker run —name buildapp-entrypoint-list buildapp:entrypoint list`
+# buildapp:entrypoint 이미지를 CMD를 list로 덮어씌우며 컨테이너로 실행
+# → ENTRYPOINT에 의해 컨테이너가 실행되며 npm list가 함께 실행됨
+
+# `docker run —name buildapp-entrypoint-list buildapp:entrypoint /bin/bash`
+# buildapp:entrypoint 이미지를 CMD를 /bin/bash로 덮어씌우며 컨테이너로 실행
+# → ENTRYPOINT에 의해 실제로 실행되는 cmd 명령은 npm /bin/bash
+# → 쉘 실행 방지
