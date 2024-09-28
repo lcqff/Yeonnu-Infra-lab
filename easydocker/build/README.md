@@ -7,7 +7,7 @@
 | 이미지의 레이어 이력 조회       | `docker image history {이미지명}`                                   | 이미지의 생성 과정을 레이어별로 확인할 수 있습니다.                      |
 | 이미지의 세부정보 출력          | `docker image inspect {이미지명}`                                   | 이미지의 세부 정보를 JSON 형식으로 출력합니다.                           |
 | 이미지 빌드                     | `docker build -t {이미지명} {Dockerfile 경로}`                   | 현재 디렉토리의 Dockerfile을 사용해 이미지를 빌드합니다.                   |
-| 컨테이너 실행                 | `docker run -it —name {컨테이너명} {이미지명}`              | 특정 이미지를 사용하여 컨테이너를 실행합니다.                    |
+| 컨테이너 실행                 | `docker run —name {컨테이너명} {이미지명}`              | 특정 이미지를 사용하여 컨테이너를 실행합니다.                    |
 | 실행 중인 컨테이너를 이미지로 생성 (커밋) | `docker commit -m {커밋명} {실행 중인 컨테이너명} {생성할 이미지명}`   | 현재 실행 중인 컨테이너의 상태를 저장하여 새로운 이미지를 만듭니다.        |
 
 ex) `docker commit -m "edited index.html by manulneko" -c 'CMD ["nginx", "-g", "daemon off;"]' officialNginx manulneko/commitnginx`  
